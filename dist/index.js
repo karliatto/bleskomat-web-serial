@@ -193,8 +193,6 @@ module.exports = function () {
   Serial.prototype.getSerialPort = function (options) {
     var _this2 = this;
 
-    console.log('getSerialPort');
-    console.log('options', options);
     return Promise.resolve().then(function () {
       options = Object.assign({
         open: true
@@ -267,7 +265,7 @@ module.exports = function () {
     ;
   };
 
-  var serialPort; // Function to listen for data from the serial port
+  var serialPort; // Listen for data from the serial port
 
   function listenForData() {
     var reader = serialPort.readable.getReader();
@@ -289,6 +287,9 @@ module.exports = function () {
           receivedData = receivedData.slice(lineBreakIndex + 1); // Display the processed line
 
           console.log('Received data:', line);
+
+          if (typeof line === 'Object') {// Return object
+          }
         }
 
         read(); // Continue reading data
@@ -342,7 +343,8 @@ module.exports = function () {
 
   function sendJsonRpcMessage(_x2) {
     return _sendJsonRpcMessage.apply(this, arguments);
-  }
+  } // TODO: add params
+
 
   function _sendJsonRpcMessage() {
     _sendJsonRpcMessage = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(data) {
@@ -387,16 +389,11 @@ module.exports = function () {
               jsonRpcMessage = {
                 jsonrpc: '2.0',
                 method: 'getinfo',
-                // params: {
-                //   // Specify the parameters of your JSON-RPC message
-                // },
-                // params: ['hola'],
                 params: [],
                 id: 'client-1-cmd-2'
               };
               console.log('jsonRpcMessage', jsonRpcMessage);
-              sendJsonRpcMessage(jsonRpcMessage); // sendButton.addEventListener('click', () => {
-              //   });
+              sendJsonRpcMessage(jsonRpcMessage);
 
             case 3:
             case "end":
@@ -417,27 +414,28 @@ module.exports = function () {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              console.log('connectToListen');
-              _context3.next = 3;
-              return navigator.serial.requestPort();
+              _context3.next = 2;
+              return navigator.serial.requestPort({
+                filters: this.options.usbFilters
+              });
 
-            case 3:
+            case 2:
               serialPort = _context3.sent;
               console.log('serialPort', serialPort);
-              _context3.next = 7;
+              _context3.next = 6;
               return serialPort.open({
                 baudRate: 115200
               });
 
-            case 7:
+            case 6:
               listenForData();
 
-            case 8:
+            case 7:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3);
+      }, _callee3, this);
     }));
 
     return function (_x4) {
