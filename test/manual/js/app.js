@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	const buttons = {
 		clear: document.querySelector('#clear-button'),
 		connect: document.querySelector('#connect-button'),
+		connectToListen: document.querySelector('#connect-to-listen-button'),
+		send: document.querySelector('#send-button'),
+		sendJsonRpc: document.querySelector('#send-json-rpc-button'),
 		flash: document.querySelector('#flash-button'),
 		checkmd5sum: document.querySelector('#checkmd5sum-button'),
 		jsonRpcSend: document.querySelector('#json-rpc-send-button'),
@@ -68,6 +71,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		event.preventDefault();
 		bleskomat.connect().catch(logger.error);
 	});
+
+	buttons.connectToListen && buttons.connectToListen.addEventListener('click', event => {
+		console.log('event', event);
+		event.preventDefault();
+		bleskomat.connectToListen().catch(logger.error);
+	});
+
+	buttons.send && buttons.send.addEventListener('click', event => {
+		console.log('event', event);
+		event.preventDefault();
+		bleskomat.send('getinfo').catch(logger.error);
+	});
+
+	buttons.sendJsonRpc && buttons.sendJsonRpc.addEventListener('click', event => {
+		console.log('event', event);
+		event.preventDefault();
+		bleskomat.sendJsonRpc('getlogs').catch(logger.error);
+	})
 
 	const loadFirmwareFromFile = function() {
 		return Promise.resolve().then(() => {
